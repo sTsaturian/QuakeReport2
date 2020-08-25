@@ -2,6 +2,7 @@ package com.example.android.quakereport;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,12 @@ import java.util.Date;
 
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
+    private Context mContext;
+
     @SuppressLint("ResourceType")
     public EarthquakeAdapter(@NonNull Activity context, ArrayList<Earthquake> words) {
         super(context, 42, words);
+        mContext = context;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -37,8 +41,21 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         assert currentEQ != null;
         magView.setText(String.format("%s", currentEQ.getMagnitude()));
 
-        TextView locView = listItemView.findViewById(R.id.location);
-        locView.setText(currentEQ.getLocation());
+        // Split the location into two two parts
+        String fullLocation = currentEQ.getLocation();
+        int ofIndex = fullLocation.indexOf(" of ");
+        String firstPart = mContext.getString(R.string.near_the);
+        String secondPart = fullLocation;
+        if (ofIndex != -1) {
+            firstPart = fullLocation.substring(0, ofIndex + 3);
+            secondPart = fullLocation.substring(ofIndex + 4);
+        }
+
+        // Find the location views and display the two parts of the location in these views
+        TextView firstLocView = listItemView.findViewById(R.id.location1);
+        firstLocView.setText(firstPart);
+        TextView secondLocView = listItemView.findViewById(R.id.location2);
+        secondLocView.setText(secondPart);
 
         // Create a new Date object from the time in milliseconds of the earthquake
         Date dateObject = new Date(currentEQ.getTimeMilliseconds());
