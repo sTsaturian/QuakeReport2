@@ -3,7 +3,9 @@ package com.example.android.quakereport;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         // this uses method getItem from the original ArrayAdapter class
-        Earthquake currentEQ = getItem(position);
+        final Earthquake currentEQ = getItem(position);
 
         // Check if the existing view is being reused, otherwise inflate the view
         View listItemView = convertView;
